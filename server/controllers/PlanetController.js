@@ -9,11 +9,12 @@ export class PlanetController extends BaseController {
         this.router
             .post('', this.createPlanet)
             .get('', this.getPlanetAll)
+            .delete('/:planetId', this.deletePlanet)
     }
 
     async createPlanet(request, response, next) {
         try {
-            logger.log('[CREATING PLANET]')
+            logger.log('[CREATING PLANET 🌏]')
             let data = request.body
             let newPlanet = await planetService.createPlanet(data)
             response.send(newPlanet)
@@ -24,8 +25,20 @@ export class PlanetController extends BaseController {
 
     async getPlanetAll(request, response, next) {
         try {
+            logger.log('[GETTING ALL PLANETS 🌎🌍🌏]')
             let planets = await planetService.getPlanetAll()
             response.send(planets)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async deletePlanet(request, response, next) {
+        try {
+            logger.log('[DESTROYING PLANET 💥]')
+            let planetId = request.params.planetId
+            let destroyPlanet = await planetService.destroyPlanet(planetId)
+            response.send(destroyPlanet)
         } catch (error) {
             next(error)
         }

@@ -1,6 +1,7 @@
 import BaseController from "../utils/BaseController.js";
 import { logger } from "../utils/Logger.js";
 import { galaxyService } from "../services/GalaxyService.js";
+import { planetService } from "../services/PlanetService.js";
 
 export class GalaxyController extends BaseController {
     constructor() {
@@ -9,6 +10,17 @@ export class GalaxyController extends BaseController {
             .post('', this.createGalaxy)
             .get('', this.getGalaxyAll)
             .delete('/:galaxyId', this.deleteGalaxy)
+            .get('/:galaxyId/planets', this.getPlanetsByGalaxyId)
+    }
+
+    async getPlanetsByGalaxyId(request, response, next) {
+        try {
+            let galaxyId = request.params.galaxyId
+            let planets = await planetService.getPlanetsByGalaxyId(galaxyId)
+            response.send(planets)
+        } catch (error) {
+            next(error)
+        }
     }
 
     async deleteGalaxy(request, response, next) {
