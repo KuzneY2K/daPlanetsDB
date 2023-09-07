@@ -1,6 +1,14 @@
 import { dbContext } from "../db/DbContext.js";
 
 class PlanetService {
+    async editPlanet(planetId, updatedPlanet) {
+        let planetToEdit = await dbContext.Planet.findById(planetId)
+        planetToEdit.name = updatedPlanet.name ? updatedPlanet.name : planetToEdit.name
+        planetToEdit.biome = updatedPlanet.biome ? updatedPlanet.biome : planetToEdit.biome
+        planetToEdit.atmosphere = updatedPlanet.atmosphere ? updatedPlanet.atmosphere : planetToEdit.atmosphere
+        planetToEdit.save()
+        return planetToEdit
+    }
     async destroyPlanet(planetId) {
         let planetToDestroy = await dbContext.Planet.findById(planetId)
         planetToDestroy.remove()

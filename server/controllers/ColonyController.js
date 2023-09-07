@@ -9,6 +9,7 @@ export class ColonyController extends BaseController {
             .post('', this.createColony)
             .get('', this.getColonyAll)
             .delete('/:colonyId', this.deleteColony)
+            .put('/:colonyId', this.editColony)
     }
 
     async createColony(request, response, next) {
@@ -17,6 +18,18 @@ export class ColonyController extends BaseController {
             let body = request.body
             let newColony = await colonyService.createColony(body)
             response.send(newColony)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async editColony(request, response, next) {
+        try {
+            logger.log('[ALTERING DNA SEQUENCE 🧬]')
+            let colonyId = request.params.colonyId
+            let body = request.body
+            let updatedColony = await colonyService.editColony(colonyId, body)
+            response.send(updatedColony)
         } catch (error) {
             next(error)
         }

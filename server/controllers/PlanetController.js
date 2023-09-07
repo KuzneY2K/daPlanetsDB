@@ -10,6 +10,7 @@ export class PlanetController extends BaseController {
             .post('', this.createPlanet)
             .get('', this.getPlanetAll)
             .delete('/:planetId', this.deletePlanet)
+            .put('/:planetId', this.editPlanet)
     }
 
     async createPlanet(request, response, next) {
@@ -18,6 +19,18 @@ export class PlanetController extends BaseController {
             let data = request.body
             let newPlanet = await planetService.createPlanet(data)
             response.send(newPlanet)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async editPlanet(request, response, next) {
+        try {
+            logger.log('[ALTERING TIME AND SPACE 🌌]')
+            let body = request.body
+            let planetId = request.params.planetId
+            let updatedPlanet = await planetService.editPlanet(planetId, body)
+            response.send(updatedPlanet)
         } catch (error) {
             next(error)
         }

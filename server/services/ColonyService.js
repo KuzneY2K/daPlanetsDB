@@ -9,6 +9,18 @@ class ColonyService {
         return `${colonyToDelete.name} was obliterated and vaporized into thin air. RIP.`
     }
 
+    async editColony(colonyId, updateBody) {
+        let colonyToUpdate = await dbContext.Colony.findById(colonyId)
+        colonyToUpdate.name = updateBody.name ? updateBody.name : colonyToUpdate.name
+        if (!updateBody.description) {
+            colonyToUpdate.description = colonyToUpdate.description
+        } else if (updateBody.description) {
+            colonyToUpdate.description = updateBody.description
+        }
+        await colonyToUpdate.save()
+        return colonyToUpdate
+    }
+
     async createColony(body) {
         let newColony = await dbContext.Colony.create(body)
         await newColony.populate('Planet')
